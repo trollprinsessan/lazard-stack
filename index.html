@@ -1,0 +1,874 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>The Lazard Stack · Voltage Test No. 01</title>
+<style>
+body {
+  font-family: "Georgia", "Times New Roman", serif;
+  font-weight: bold;
+  line-height: 1.3;
+  max-width: 580px;
+  margin: 0 auto;
+  padding: 0 1rem;
+  color: #040FAA;
+  background-color: white;
+  -webkit-filter: url("#distort");
+  filter: url("#distort");
+  counter-reset: item;
+}
+
+h1, h2, h3 {
+  color: #DA0303;
+  text-transform: uppercase;
+  text-align: center;
+  font-weight: bold;
+}
+h1 {
+  font-size: 300%;
+  line-height: 0.9;
+  margin-bottom: 1.5rem;
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+}
+h2 { font-size: 150%; }
+h1::before, h1::after { content: "\26A1"; font-style: italic; font-size: 90%; }
+h3::before, h3::after { content: "\273F"; padding: 0 0.5rem; }
+
+p, details { margin: 0.75rem 0; }
+
+header {
+  font-family: Arial, sans-serif;
+  font-weight: normal;
+  transform: skew(0.25deg, 0.3deg);
+  text-transform: uppercase;
+  text-align: center;
+  display: flex;
+  flex-flow: row wrap;
+  justify-content: center;
+  align-items: center;
+}
+header h2 { margin: 0; margin-top: 2rem; }
+header p, header div {
+  flex-basis: 250px;
+  margin: 0;
+  margin-top: 0.5em;
+}
+
+a, summary {
+  color: #040FAA;
+  text-decoration: underline;
+  text-underline-offset: 0.1rem;
+  font-style: italic;
+  cursor: pointer;
+}
+a:active { color: #DA0303; }
+summary { text-align: center; }
+
+#slogan {
+  border-bottom: solid 2px;
+  padding-bottom: 0.5em;
+  color: #040FAA;
+  transform: skew(-1deg, -0.5deg);
+  margin: 0.5em;
+}
+.full { flex-basis: 100%; }
+
+.important { font-style: italic; font-weight: bold; }
+
+.action {
+  font-weight: bold;
+  font-size: 130%;
+  line-height: 1;
+  color: #DA0303;
+  font-family: Arial, sans-serif;
+}
+.action a { font-style: normal; color: inherit; }
+.action a:active { font-style: italic; }
+
+.pitch { line-height: 1; font-family: Arial, sans-serif; }
+.pitch p { max-width: 340px; margin-left: auto; margin-right: auto; }
+
+.question { font-family: Arial, sans-serif; font-style: italic; }
+.answer {
+  padding: 0 1rem;
+  font-style: italic;
+  font-weight: normal;
+  font-family: "Georgia", "Times New Roman", serif;
+}
+
+.services {
+  border: solid 2px;
+  padding: 0 1rem;
+}
+.serviceinfo, .serviceextras {
+  font-style: italic;
+  font-weight: normal;
+}
+.service { text-transform: uppercase; align-items: baseline; }
+
+ol { padding: 0; list-style: none; }
+ol p { margin: 0; margin-bottom: 0.5rem; }
+.service:before { content: counter(item) ". "; }
+ol li { counter-increment: item; }
+.item { margin: 1rem 0; }
+
+hr {
+  border: none;
+  border-top: solid 2px;
+  color: #040FAA;
+  transform: skew(-1deg, -0.5deg);
+  margin: 0.5em;
+}
+.line {
+  display: flex;
+  align-items: baseline;
+}
+.line hr {
+  border: none;
+  border-bottom: dotted 2px;
+  transform: unset;
+  flex-grow: 1;
+  margin: 0 0.5rem;
+}
+.service, .price { margin: 0; }
+
+/* ───── Per-layer toggle, dressed as a service line ───── */
+.viewbar {
+  display: flex;
+  align-items: baseline;
+  justify-content: center;
+  gap: 0.6rem;
+  margin: 20px 0 0.6rem;
+  font-family: Arial, sans-serif;
+  font-style: italic;
+  font-size: 90%;
+  font-weight: normal;
+}
+.viewbar .lbl { color: #040FAA; }
+.viewbar a {
+  font-style: normal;
+  font-weight: bold;
+  text-transform: uppercase;
+  text-decoration: none;
+  border-bottom: dotted 2px #040FAA;
+  padding-bottom: 1px;
+}
+.viewbar a.on.today { color: #040FAA; border-bottom-color: #040FAA; border-bottom-style: solid; }
+.viewbar a.on.fut   { color: #DA0303; border-bottom-color: #DA0303; border-bottom-style: solid; }
+
+.move-row .price { color: #040FAA; font-family: Arial, sans-serif; font-size: 90%; }
+
+/* ───── Diptych: today | 2040, side by side ───── */
+.diptych {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0;
+  margin-top: 0.4rem;
+  cursor: default;
+}
+.dip-side {
+  padding: 0.5rem 0.7rem;
+  cursor: pointer;
+  transition: opacity 0.25s, transform 0.25s;
+}
+.dip-side.today { color: #040FAA; }
+.dip-side.fut   { color: #DA0303; border-left: dotted 2px #040FAA; }
+
+.dip-label {
+  font-family: Arial, sans-serif;
+  font-style: normal;
+  font-weight: bold;
+  font-size: 80%;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  margin-bottom: 0.2rem;
+  display: flex;
+  align-items: baseline;
+  gap: 0.3rem;
+}
+.dip-label .arrow { font-size: 110%; }
+.dip-body {
+  font-style: italic;
+  font-weight: normal;
+  font-size: 95%;
+  line-height: 1.3;
+}
+
+/* Tug-of-war states: default = balanced. Active side bold, inactive side faded. */
+.move-row.is-today .dip-side.fut   { opacity: 0.25; }
+.move-row.is-today .dip-side.today { transform: scale(1.01); }
+.move-row.is-fut   .dip-side.today { opacity: 0.25; }
+.move-row.is-fut   .dip-side.fut   { transform: scale(1.01); }
+
+.dip-side:hover { opacity: 1 !important; }
+
+/* When 2040 active for a section, recolour its chrome */
+.section.is2040 h3 { color: #DA0303; }
+.section.is2040 .service { color: #DA0303; }
+
+/* Flicker the section briefly when flipped */
+.section.flicker { animation: surge 0.55s steps(8) 1; }
+@keyframes surge {
+  0%, 100% { filter: none; }
+  50%      { filter: blur(0.4px) contrast(1.15); }
+}
+
+/* ───── Lightning strike on flip ───── */
+.move-row.struck .bolt { animation: strike 0.7s ease-out 1; }
+@keyframes strike {
+  0%   { transform: scale(1)   translateY(0)    rotate(0);   color: #DA0303; text-shadow: none; }
+  15%  { transform: scale(1.8) translateY(-2px) rotate(-8deg); color: #FFE000; text-shadow: 0 0 12px #FFE000, 0 0 4px #FFE000; }
+  30%  { transform: scale(2.2) translateY(-3px) rotate(6deg);  color: #FFFFFF; text-shadow: 0 0 18px #FFE000, 0 0 8px #FFFFFF; }
+  45%  { transform: scale(1.7) translateY(-1px) rotate(-4deg); color: #FFE000; text-shadow: 0 0 10px #FFE000; }
+  60%  { transform: scale(1.3) rotate(2deg);  color: #FFB300; text-shadow: 0 0 6px #FFB300; }
+  100% { transform: scale(1)   rotate(0);     color: #DA0303; text-shadow: none; }
+}
+
+/* The punchline word on the right gets a brief flash too */
+.move-row.struck .punchline .to {
+  animation: word-flash 0.7s ease-out 1;
+}
+@keyframes word-flash {
+  0%   { color: #DA0303; }
+  20%  { color: #FFE000; text-shadow: 0 0 8px #FFE000; }
+  100% { color: #DA0303; text-shadow: none; }
+}
+
+/* Audiences as italic tag string */
+.audience {
+  font-family: Arial, sans-serif;
+  font-style: italic;
+  font-weight: normal;
+  font-size: 85%;
+  color: #040FAA;
+  margin-top: 0.2rem;
+}
+
+/* Punchline = column headers for the diptych below */
+.punchline {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0;
+  font-family: Arial, sans-serif;
+  font-weight: bold;
+  font-style: normal;
+  font-size: 100%;
+  text-transform: uppercase;
+  margin: 0.6rem 0 0;
+  letter-spacing: 0.02em;
+  line-height: 1.15;
+}
+.punchline .from {
+  color: #040FAA;
+  padding: 0.4rem 0.7rem 0.3rem;
+  text-align: left;
+}
+.punchline .to {
+  color: #DA0303;
+  padding: 0.4rem 0.7rem 0.3rem;
+  text-align: left;
+  border-left: dotted 2px #040FAA;
+}
+.punchline .bolt {
+  display: inline-block;
+  margin-right: 0.3rem;
+  font-style: normal;
+}
+
+/* Voltage meter, sticky strip that follows you down the page */
+#voltage {
+  position: sticky;
+  top: 0;
+  z-index: 50;
+  text-align: center;
+  margin: 1.2rem -1rem 2.5rem;
+  padding: 0.5rem 1rem 0.4rem;
+  background: white;
+  border-top: solid 2px #040FAA;
+  border-bottom: solid 2px #040FAA;
+  font-family: Arial, sans-serif;
+  font-weight: bold;
+  font-size: 95%;
+  cursor: pointer;
+  user-select: none;
+}
+#voltage .meter {
+  display: inline-block;
+  font-family: "Courier New", monospace;
+  letter-spacing: -0.05em;
+  font-size: 130%;
+  vertical-align: middle;
+  color: #DA0303;
+}
+#voltage .meter .off { color: #c8cdf0; }
+#voltage .count {
+  color: #040FAA;
+  font-style: italic;
+  font-weight: normal;
+  font-family: "Georgia", serif;
+  margin-left: 0.4rem;
+}
+#voltage.complete .count { color: #DA0303; font-style: normal; font-weight: bold; text-transform: uppercase; }
+#voltage .hint {
+  display: block;
+  font-family: "Georgia", serif;
+  font-style: italic;
+  font-weight: normal;
+  font-size: 75%;
+  color: #040FAA;
+  margin-top: 0.2rem;
+}
+
+details.detail { margin: 0.4rem 0 0.2rem; }
+details.detail summary {
+  font-family: Arial, sans-serif;
+  font-style: italic;
+  font-size: 90%;
+  text-align: left;
+}
+details.detail .detail-body {
+  padding: 0.4rem 1rem 0;
+  font-style: italic;
+  font-weight: normal;
+}
+details.detail .dl {
+  font-family: Arial, sans-serif;
+  font-style: normal;
+  font-weight: bold;
+  text-transform: uppercase;
+  color: #DA0303;
+  font-size: 85%;
+  margin-top: 0.3rem;
+}
+
+.addendum { font-style: italic; font-weight: normal; }
+.addendum a { text-decoration: none; color: inherit; }
+.addendum a:active { color: #DA0303; }
+
+#barcode, #copyright {
+  display: flex;
+  justify-content: space-around;
+  flex-flow: row-reverse wrap;
+  align-items: center;
+}
+#legal {
+  font-family: Arial, sans-serif;
+  font-size: 75%;
+  text-align: center;
+}
+#legal p { margin: 0.2rem 0; padding: 0 10px; }
+
+@media (max-width: 600px) {
+  body {
+    filter: url("#distort-mobile");
+    padding: 0 0.6rem;
+    line-height: 1.25;
+  }
+  .services { transform: skew(0); padding: 0 0.5rem; }
+  #mirror { transform: scaleX(-1); opacity: 2%; }
+  #mirror header, #mirror .services, #mirror .pitch p, #mirror details .faq { transform: skew(0); }
+
+  /* Header tightening */
+  h1 { font-size: 220%; margin-bottom: 1rem; }
+  h2 { font-size: 130%; }
+  h3 { font-size: 115%; }
+  header h2 { margin-top: 1.2rem; }
+  #slogan { font-size: 88%; }
+  header p, header div { flex-basis: 150px; font-size: 82%; }
+  .full { flex-basis: 100%; }
+  .action { font-size: 95%; }
+
+  /* Pitch */
+  .pitch { font-size: 90%; }
+  .pitch p { margin-top: 0.6rem; margin-bottom: 0.6rem; }
+
+  /* Voltage meter */
+  #voltage {
+    margin: 0.8rem -0.6rem 1.4rem;
+    padding: 0.4rem 0.6rem 0.3rem;
+    font-size: 85%;
+  }
+  #voltage .meter { font-size: 115%; }
+  #voltage .hint { font-size: 70%; }
+
+  /* Viewbar */
+  .viewbar { font-size: 82%; gap: 0.4rem; margin-top: 14px; flex-wrap: wrap; }
+
+  /* Move row */
+  .item { margin: 0.7rem 0; }
+  .move-leader, .line { font-size: 90%; }
+  .service { font-size: 90%; }
+
+  /* Diptych stays 2-col but tighter */
+  .diptych { gap: 0; margin-top: 0.3rem; }
+  .dip-side { padding: 0.35rem 0.45rem; }
+  .dip-body { font-size: 86%; line-height: 1.3; }
+
+  /* Punchline column headers — smaller so they fit */
+  .punchline { font-size: 82%; line-height: 1.1; }
+  .punchline .from, .punchline .to { padding: 0.3rem 0.45rem 0.25rem; }
+  .punchline .bolt { margin-right: 0.2rem; }
+
+  /* Audience + details */
+  .audience { font-size: 78%; }
+  details.detail summary { font-size: 82%; }
+  details.detail .detail-body { padding: 0.3rem 0.4rem 0; font-size: 90%; }
+  .detail-text { font-size: 13px; }
+
+  /* FAQ */
+  .question, .answer { font-size: 90%; }
+
+  /* Action link */
+  .action { font-size: 110%; }
+}
+</style>
+</head>
+<body>
+<div id="main">
+
+<header>
+  <div class="full">
+    <h2>Voltage Test No. 01</h2>
+    <p id="slogan">"What it takes to make Europe the Electro Union"</p>
+  </div>
+  <p class="important">Twelve moves<br>to plug it in</p>
+  <p style="font-style:italic;">The European diagnosis<br>and direction</p>
+  <p class="action">After: <br><a href="https://www.norrsken.org/goodnews/make-europe-the-electro-union" target="_blank" rel="noopener">norrsken.org / electro-union</a></p>
+</header>
+
+<h1>The Lazard<br>Stack</h1>
+
+<section class="pitch">
+  <p>The energy transition is a power transition. Climate policy is industrial policy. Europe gets one chance to rewire itself for 2040, or it imports the future from someone else.</p>
+  <p>Olivia Lazard sets out the diagnosis. Twelve domains where Europe's status quo is failing, and the twelve moves that replace it. Three layers, bottom to top, the foundations, the engine room, the money.</p>
+  <p>Below, each layer is a menu. Click <em>Electro Union →</em> to flip a layer from today's reality to the Electro Union that replaces it. Or flip the whole sheet at once. It's an all-hands-on-deck kind of situation, only all hands need to learn quickly how to coordinate.</p>
+
+  <details class="faqs"><summary>Click for FAQs!</summary>
+  <div class="faq" style="border:#DA0303 solid 2px;padding:0 1rem;margin-top:1rem;">
+    <p class="question">What is the Electro Union?</p>
+    <p class="answer">A 2040 Europe organised around electrification, of industry, defence, capital and politics, instead of around imported energy and exported intellectual property. A peace project that meets the stakes of the future, built in partnership with other middle powers. Also an open letter from Norrsken Foundation.</p>
+    <p class="question">Who is Olivia Lazard?</p>
+    <p class="answer">Founder of <a href="https://www.transitionintelligence.com" target="_blank" rel="noopener">Transition Intelligence</a>, Berggruen Institute Fellow, Director of Peace in Design Consulting.</p>
+    <p class="question">Why a stack and not a list?</p>
+    <p class="answer">Because climate policy is industrial policy is regenerative policy. A stack has interdependent layers that need to be designed for prolific innovation and cross-fertilisation at and across every layer. Pick recommendations at the expense of others and the whole architecture stops compounding.</p>
+    <p class="question">What happens if Europe doesn't do this?</p>
+    <p class="answer">Europe becomes a museum with questionable public transport.</p>
+    <p class="question">Is this a joke?</p>
+    <p class="answer">No.</p>
+  </div>
+  </details>
+</section>
+
+<p style="text-align:center;margin:1.5rem 0 0.5rem;font-family:Arial, sans-serif;font-style:italic;font-weight:normal;">
+  Flip the whole sheet:
+  <a href="#" id="gflip-today" class="on" style="font-style:normal;font-weight:bold;text-transform:uppercase;text-decoration:none;border-bottom:solid 2px;padding-bottom:1px;color:#DA0303;margin:0 0.4rem;">Today</a>
+  /
+  <a href="#" id="gflip-2040" style="font-style:normal;font-weight:bold;text-transform:uppercase;text-decoration:none;border-bottom:dotted 2px;padding-bottom:1px;margin:0 0.4rem;">Electro Union →</a>
+</p>
+
+<div id="voltage" title="Click to wire the next move">
+  <span class="meter" id="meter"></span>
+  <span class="count" id="count">0 / 12 wired</span>
+  <span class="hint">Click the meter to wire one move at a time →</span>
+</div>
+
+<div id="stack"></div>
+
+<p class="addendum" style="text-align:center;">
+  &#9850; 100% Recyclable HTML/CSS &nbsp;·&nbsp;
+  After the essay by Olivia Lazard, 2026 &nbsp;·&nbsp;
+  <a href="https://www.norrsken.org/goodnews/make-europe-the-electro-union" target="_blank" rel="noopener">Read the open letter</a>
+</p>
+
+</div>
+
+<div id="barcode">
+  <div id="legal">
+    <p id="copyright">
+      <span>Norrsken Foundation</span>
+      <span>·</span>
+      <span>Bulletin 01 / 2026</span>
+    </p>
+    <p>&#9850; Printed in two colours on one continent</p>
+  </div>
+</div>
+
+<script>
+const STACK = [
+  {
+    id: "L1",
+    name: "The Foundations",
+    tag: "What Europe needs underneath everything else",
+    moves: [
+      {
+        tag: "L1.01",
+        title: "Critical minerals",
+        shift: { from: "Kill switch", to: "Coalition" },
+        today: "Europe imports the materials of the transition, lithium, cobalt, nickel, rare earths, graphite, through fragmented bilateral deals, mostly from one dominant supplier with a kill switch.",
+        future: "A buying-and-processing coalition with allied countries that share the geology and the squeeze, joint stockpiles, joint contracts at predictable prices, joint capacity.",
+        audiences: ["policy", "vc"],
+        actor: "The European Commission and national foreign ministries, negotiating as one bloc instead of 27 separate countries. Europe's public banks underwrite the deals so private buyers can sign long-term contracts at predictable prices.",
+        how: "A binding multi-year agreement, signed at the highest political level, modelled on the post-2022 joint gas-buying platform. Applied to lithium, cobalt, nickel, rare earths, graphite, and the processing capacity for each. Partners include Canada, Australia, Chile, Norway, the UK, India, Morocco, Kazakhstan, Indonesia."
+      },
+      {
+        tag: "L1.02",
+        title: "Strategic honesty",
+        shift: { from: "Half-measures everywhere", to: "Triage" },
+        today: "Industrial policy that pretends Europe can reshore everything, and therefore reshores nothing well. Half-measures across the board.",
+        future: "A public list ranking which dependencies are fatal and which we can live with. Strong protection at the top. Open markets at the bottom. Different rules for different tiers.",
+        audiences: ["policy"],
+        actor: "The European Commission, working with central bankers and national security people, not just trade officials. The political price of seriousness is admitting out loud which dependencies are fatal and which aren't.",
+        how: "A public, regularly updated ranking of what's critical and what isn't. Strong home-content rules at the top, market competition at the bottom. One-size-fits-all industrial policy ends up protecting nothing well."
+      },
+      {
+        tag: "L1.03",
+        title: "Land and water",
+        shift: { from: "Environmental side-issue", to: "Load-bearing pillar" },
+        today: "Southern Europe is drying out, aquifers depleting, soils degrading, rainfall destabilising, faster than industrial planning can keep up. Treated as an environmental side-issue, not an industrial one.",
+        future: "Restoration of soils, wetlands, forests and farmland built into industrial policy as a load-bearing pillar. A transition that secures cobalt while losing rain has not, in any serious sense, secured anything.",
+        audiences: ["policy", "vc", "operator"],
+        actor: "Environmental, agricultural, climate and industrial policy departments, working together, not in their usual silos. Southern member states most exposed to drought (Spain, Portugal, Italy, Greece, southern France) lead the rollout. Public banks treat ecological collapse as the systemic financial risk it actually is.",
+        how: "One coherent law that pulls together agricultural reform, water management, soil protection and nature restoration, instead of four parallel files that don't talk to each other. Funded through carbon revenues. Extended through diplomacy: Spain's rainfall depends on North Africa's land."
+      }
+    ]
+  },
+  {
+    id: "L2",
+    name: "The Engine Room",
+    tag: "The policy and money that has to flow",
+    moves: [
+      {
+        tag: "L2.01",
+        title: "Industrial electricity",
+        shift: { from: "Price gap", to: "Power contract" },
+        today: "European factories pay three to four times more for power than American or Chinese ones. No business case for electrifying steel, chemicals, cement.",
+        future: "Long-term electricity contracts at predictable prices, in exchange for binding electrification commitments from heavy industry. Not a hand-out, a contract.",
+        audiences: ["policy", "operator"],
+        actor: "The Commission proposes, national governments decide. Europe's competition watchdog either adapts the rules, or admits it's the thing blocking the whole transition.",
+        how: "Long-term electricity deals between government, energy providers and big industrial users, locked in at predictable prices. In exchange: binding commitments to electrify. Without this, no other recommendation in the stack survives contact with reality."
+      },
+      {
+        tag: "L2.02",
+        title: "European capital",
+        shift: { from: "Transatlantic leak", to: "Continental flow" },
+        today: "Trillions in European pensions and insurance savings flow across the Atlantic to finance American and Chinese growth, because moving capital across European borders is harder than moving it overseas.",
+        future: "One genuine capital market across the continent. Pensions, savings and venture capital pointed at European companies, with rules that finally let them flow.",
+        audiences: ["policy", "vc"],
+        actor: "The Commission, the European Central Bank, and the finance ministers of France, Germany, the Netherlands, Italy and Spain, who can either lead this or block it.",
+        how: "Treat it as one big legislative package instead of a decade of incremental fixes. Common rules across Europe for bankruptcy, lending, pensions, and oversight of the biggest financial players. It has been \"almost finished\" for fifteen years. That's the diagnosis."
+      },
+      {
+        tag: "L2.03",
+        title: "Fiscal firepower",
+        shift: { from: "27 limits", to: "One balance sheet" },
+        today: "Twenty-seven national budgets, several already at their limits, expected to finance a continental industrial transformation. They can't.",
+        future: "A dedicated European pot of money, funded by its own income streams (carbon revenues, digital taxes, border charges), ring-fenced for the transition. A purpose-built balance sheet, not another budget line.",
+        audiences: ["policy", "vc"],
+        actor: "Heads of government. This is a treaty-level decision, not a Brussels memo.",
+        how: "Call it a Eurobond, an expanded public investment bank, or a permanent version of the post-Covid recovery fund. The point is that 27 national balance sheets cannot underwrite a continental transition. Either the fiscal architecture gets built, or the transition gets imported."
+      },
+      {
+        tag: "L2.04",
+        title: "Government as customer",
+        shift: { from: "Subsidising supply", to: "Guaranteeing demand" },
+        today: "Europe is the world's biggest single market. It has used that buying power to support its own industries roughly never, subsidising production from the supply side while demand leaks abroad.",
+        future: "When governments buy, hospitals, military, transport, grids, they specify European or allied content. Guaranteed demand changes the maths that subsidies cannot.",
+        audiences: ["policy", "operator"],
+        actor: "Every level of government with a budget to spend, Brussels, capitals, regions, cities.",
+        how: "A coordinated content framework with phased thresholds. Domestic content rules extended to allied jurisdictions in the minerals coalition. Pulls a hospital in Madrid and a train operator in Berlin in the same direction."
+      },
+      {
+        tag: "L2.05",
+        title: "Energy + defence",
+        shift: { from: "Three silos", to: "One portfolio" },
+        today: "Energy, defence and industrial policy treated as three separate fights for the same political budget. Drones, batteries, rare earths, secure grids, all in different silos.",
+        future: "One strategic portfolio. The technologies that electrify the economy are the same ones that secure it. Funded and procured together.",
+        audiences: ["policy", "vc", "operator"],
+        actor: "The Commission, the European Defence Agency, defence ministries, and the European Investment Bank, which until very recently couldn't lend to defence at all, and now can. That change is bigger than people realise.",
+        how: "A single strategic investment framework that explicitly funds dual-use technologies, with shared procurement pipelines across energy and defence. Drones need batteries. Tanks need rare earths. Grid resilience is a national security asset."
+      }
+    ]
+  },
+  {
+    id: "L3",
+    name: "The Money",
+    tag: "Where private capital has to show up",
+    moves: [
+      {
+        tag: "L3.01",
+        title: "What VC actually funds",
+        shift: { from: "Apps and AI", to: "The industrial middle" },
+        today: "European venture capital chases consumer apps and AI software. The unglamorous middle, mineral processing, power equipment, grid hardware, industrial heat, sits unfunded.",
+        future: "Funds that take the industrial middle seriously, positioned for a decade when public banks become their largest co-investor and customer.",
+        audiences: ["vc"],
+        actor: "European venture funds, both generalist and deep-tech. American investors are already racing into this space. Europe needs to be in the game.",
+        how: "A fund that takes this thesis seriously in 2026 positions itself for a decade in which European governments become the largest co-investor and customer in the room. Conditional on the upstream stuff actually getting built, which means advocating for it is part of the investment job."
+      },
+      {
+        tag: "L3.02",
+        title: "Where companies end up",
+        shift: { from: "American exit", to: "European maturity" },
+        today: "European startups built from day one to be sold or listed in America. Innovation, jobs and returns leave the continent at scale.",
+        future: "Companies built to be sold or listed in Europe, or to allied middle powers, from inception. Different growth path, different co-investors, different geography of follow-on capital.",
+        audiences: ["vc"],
+        actor: "European venture capital firms, at the moment they're designing a new fund.",
+        how: "Ownership structures, governance, and intellectual property arrangements all built for European outcomes from the start. The default model assumes a US strategic acquirer or a US listing. That assumption is fragile under an American administration increasingly hostile to European tech."
+      },
+      {
+        tag: "L3.03",
+        title: "Public and private together",
+        shift: { from: "Contamination", to: "Coalition" },
+        today: "European VCs treat state co-investment as contamination. Public banks and sovereign wealth funds excluded from the table; deals less competitive as a result.",
+        future: "Mixed cap tables as the new normal. Public banks, sovereign wealth, industrial primes and venture capital at the same table, without venture losing decision-making independence.",
+        audiences: ["vc"],
+        actor: "European venture capital managers who can work in mixed public-private ownership without losing their independence on decisions.",
+        how: "Build the muscle for partnership. The companies that win the transition will have mixed ownership. The investors who learn to operate in that world get the best deals. Sovereign wealth from Norway, Singapore, sometimes others. Public banks. Industrial primes."
+      },
+      {
+        tag: "L3.04",
+        title: "Holding our winners",
+        shift: { from: "Handing off", to: "Holding on" },
+        today: "Europe seeds and Series-A's well, then hands its winners to American growth funds. Continent finances other people's industrial base with its own intellectual property.",
+        future: "Half-a-billion to two-billion euro growth funds that can hold European winners through to maturity, with European and allied capital behind them.",
+        audiences: ["vc", "policy"],
+        actor: "European pension funds, insurance companies and venture firms. Partly a structural problem (see European capital, Layer 2), partly a confidence problem about what European investors think is possible.",
+        how: "Deliberately build the growth funds that don't yet exist. €500M to €2B per fund. With LP bases that are European and allied, not over-reliant on American limited partners whose own incentives are increasingly misaligned."
+      }
+    ]
+  }
+];
+
+const AUD_LABEL = { vc: "VC", policy: "Policy", operator: "Operator" };
+const layerView = { L1: "today", L2: "today", L3: "today" };
+
+function audStr(a) { return a.map(x => AUD_LABEL[x]).join(" · "); }
+
+function renderStack() {
+  const html = STACK.map((layer, li) => {
+    const v = layerView[layer.id];
+    return `
+      <section class="services section ${v === '2040' ? 'is2040' : ''}" data-layer="${layer.id}">
+        <h3>Layer ${li + 1} &middot; ${layer.name}</h3>
+        <p class="serviceextras" style="text-align:center;margin-top:-15px;">${layer.tag}</p>
+
+        <p class="viewbar">
+          <span class="lbl">Read this layer as:</span>
+          <a href="#" data-flip="${layer.id}" data-val="today" class="today ${v === 'today' ? 'on' : ''}">Today</a>
+          /
+          <a href="#" data-flip="${layer.id}" data-val="2040" class="fut ${v === '2040' ? 'on' : ''}">Electro Union →</a>
+        </p>
+
+        <ol>
+          ${layer.moves.map(m => `
+            <div class="item move-row is-${v === '2040' ? 'fut' : 'today'}" data-move="${m.tag}" data-layer-ref="${layer.id}">
+              <li class="line">
+                <p class="service">${m.title}</p>
+                <hr>
+                <p class="price">${m.tag}</p>
+              </li>
+              <p class="punchline">
+                <span class="from">${m.shift.from}</span>
+                <span class="to"><span class="bolt">⚡</span>${m.shift.to}</span>
+              </p>
+              <div class="diptych">
+                <div class="dip-side today" data-side="today" data-move-ref="${m.tag}">
+                  <div class="dip-body">${m.today}</div>
+                </div>
+                <div class="dip-side fut" data-side="fut" data-move-ref="${m.tag}">
+                  <div class="dip-body">${m.future}</div>
+                </div>
+              </div>
+              <p class="audience">✦ Acts on: ${audStr(m.audiences)}</p>
+              <details class="detail">
+                <summary>Who acts &amp; How</summary>
+                <div class="detail-body">
+                  <div class="dl">Who acts</div>
+                  <p>${m.actor}</p>
+                  <div class="dl">How</div>
+                  <p>${m.how}</p>
+                </div>
+              </details>
+            </div>
+          `).join('')}
+        </ol>
+      </section>
+    `;
+  }).join('');
+  document.getElementById('stack').innerHTML = html;
+  bind();
+  rebuildMirror();
+}
+
+function setLayer(id, val) {
+  if (layerView[id] === val) return;
+  layerView[id] = val;
+  renderStack();
+  const el = document.querySelector(`#main [data-layer="${id}"]`);
+  if (el) {
+    el.classList.add('flicker');
+    setTimeout(() => el.classList.remove('flicker'), 600);
+    if (val === '2040') {
+      el.querySelectorAll('.move-row').forEach((row, i) => {
+        setTimeout(() => zap(row), 120 + i * 140);
+      });
+    }
+  }
+  syncGlobal();
+}
+
+function setAll(val) {
+  STACK.forEach(l => layerView[l.id] = val);
+  renderStack();
+  document.querySelectorAll('#main .section').forEach((el, si) => {
+    setTimeout(() => {
+      el.classList.add('flicker');
+      setTimeout(() => el.classList.remove('flicker'), 600);
+      if (val === '2040') {
+        el.querySelectorAll('.move-row').forEach((row, mi) => {
+          setTimeout(() => zap(row), mi * 120);
+        });
+      }
+    }, si * 220);
+  });
+  syncGlobal();
+}
+
+function syncGlobal() {
+  const vals = Object.values(layerView);
+  const all2040 = vals.every(v => v === '2040');
+  const allToday = vals.every(v => v === 'today');
+  const tBtn = document.getElementById('gflip-today');
+  const fBtn = document.getElementById('gflip-2040');
+  tBtn.classList.toggle('on', allToday);
+  fBtn.classList.toggle('on', all2040);
+  tBtn.style.color = allToday ? '#DA0303' : '#040FAA';
+  fBtn.style.color = all2040 ? '#DA0303' : '#040FAA';
+  tBtn.style.borderBottomStyle = allToday ? 'solid' : 'dotted';
+  fBtn.style.borderBottomStyle = all2040 ? 'solid' : 'dotted';
+}
+
+function bind() {
+  document.querySelectorAll('[data-flip]').forEach(a => {
+    a.onclick = (e) => { e.preventDefault(); setLayer(a.dataset.flip, a.dataset.val); };
+  });
+  // Per-move side click, pulls one side of the diptych forward
+  document.querySelectorAll('#main .dip-side').forEach(el => {
+    el.onclick = (e) => {
+      e.preventDefault();
+      const row = el.closest('.move-row');
+      const side = el.dataset.side;
+      const wasAlreadyFut = row.classList.contains('is-fut');
+      row.classList.remove('is-today', 'is-fut');
+      row.classList.add('is-' + side);
+      if (side === 'fut' && !wasAlreadyFut) zap(row);
+      updateMeter();
+    };
+  });
+  updateMeter();
+}
+
+function zap(row) {
+  row.classList.remove('struck');
+  void row.offsetWidth;
+  row.classList.add('struck');
+  setTimeout(() => row.classList.remove('struck'), 750);
+}
+
+function updateMeter() {
+  const rows = document.querySelectorAll('#main #stack .move-row');
+  const total = rows.length || 12;
+  let wired = 0;
+  rows.forEach(r => { if (r.classList.contains('is-fut')) wired++; });
+  const filled = '█'.repeat(wired);
+  const empty  = '░'.repeat(total - wired);
+  const meterEl = document.getElementById('meter');
+  const countEl = document.getElementById('count');
+  const wrap    = document.getElementById('voltage');
+  if (!meterEl) return;
+  meterEl.innerHTML = `[<span class="on">${filled}</span><span class="off">${empty}</span>]`;
+  if (wired >= total) {
+    countEl.textContent = '★ Circuit complete ★';
+    wrap.classList.add('complete');
+  } else {
+    countEl.textContent = `${wired} / ${total} wired`;
+    wrap.classList.remove('complete');
+  }
+}
+
+document.getElementById('voltage').onclick = (e) => {
+  e.preventDefault();
+  const rows = Array.from(document.querySelectorAll('#main #stack .move-row'));
+  const next = rows.find(r => !r.classList.contains('is-fut'));
+  if (next) {
+    next.classList.remove('is-today');
+    next.classList.add('is-fut');
+    next.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    zap(next);
+    updateMeter();
+  } else {
+    rows.forEach(r => { r.classList.remove('is-fut'); r.classList.add('is-today'); });
+    updateMeter();
+  }
+};
+
+document.getElementById('gflip-today').onclick = (e) => { e.preventDefault(); setAll('today'); };
+document.getElementById('gflip-2040').onclick = (e) => { e.preventDefault(); setAll('2040'); };
+
+// ───── Mirror ghost (the carbon copy), rebuilds after each render ─────
+function rebuildMirror() {
+  const old = document.getElementById('mirror');
+  if (old) old.remove();
+  const main = document.getElementById('main');
+  const mirror = main.cloneNode(true);
+  mirror.inert = true;
+  mirror.style.cssText = `
+    position: absolute;
+    max-width: 580px;
+    margin: 0 auto;
+    padding: 0 1rem;
+    top: 0; right: 0; left: 0;
+    transform: scaleX(-1);
+    overflow: hidden;
+    z-index: -10;
+    opacity: 2%;
+    pointer-events: none;
+  `;
+  mirror.ariaHidden = true;
+  mirror.id = 'mirror';
+  main.after(mirror);
+  mirror.querySelectorAll('section, header, .pitch p, h1, .addendum').forEach(el => {
+    const s = Math.random();
+    el.style.transform = `skew(${s}deg, -${s}deg)`;
+  });
+}
+
+renderStack();
+
+// FAQ details mirror sync (from cheap.urls.loan)
+const details = document.querySelector('.faqs');
+if (details) {
+  details.addEventListener('toggle', () => {
+    const md = document.querySelector('#mirror .faqs');
+    if (md) md.open = details.open;
+  });
+}
+</script>
+
+<svg version="1.1" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" width="0" height="0">
+<defs>
+  <filter id="distort">
+    <feTurbulence baseFrequency="1 1" numOctaves="1" />
+    <feDisplacementMap in="SourceGraphic" scale="1.8" />
+  </filter>
+  <filter id="distort-mobile">
+    <feTurbulence baseFrequency="1 1" numOctaves="1" />
+    <feDisplacementMap in="SourceGraphic" scale="1.35" />
+  </filter>
+</defs>
+</svg>
+
+</body>
+</html>
