@@ -89,7 +89,6 @@ summary { text-align: center; }
 .action a:active { font-style: italic; }
 
 .pitch { line-height: 1; font-family: Arial, sans-serif; }
-.pitch p { max-width: 340px; margin-left: auto; margin-right: auto; }
 
 .question { font-family: Arial, sans-serif; font-style: italic; }
 .answer {
@@ -380,10 +379,11 @@ details.detail .dl {
   header p, header div { flex-basis: 150px; font-size: 82%; }
   .full { flex-basis: 100%; }
   .action { font-size: 95%; }
+  .dd-prefix { display: none; }
 
   /* Pitch */
   .pitch { font-size: 90%; }
-  .pitch p { margin-top: 0.6rem; margin-bottom: 0.6rem; }
+  .pitch p { max-width: 340px; margin: 0.6rem auto; }
 
   /* Voltage meter */
   #voltage {
@@ -435,7 +435,7 @@ details.detail .dl {
     <p id="slogan">"What it takes to make Europe the Electro Union"</p>
   </div>
   <p class="important">Twelve moves<br>to plug it in</p>
-  <p style="font-style:italic;">The European diagnosis<br>and direction</p>
+  <p style="font-style:italic;"><span class="dd-prefix">Europe's </span>Diagnosis<br>and direction</p>
   <p class="action">After: <br><a href="https://www.norrsken.org/goodnews/make-europe-the-electro-union" target="_blank" rel="noopener">norrsken.org / electro-union</a></p>
 </header>
 
@@ -463,7 +463,7 @@ details.detail .dl {
 </section>
 
 <p style="text-align:center;margin:1.5rem 0 0.5rem;font-family:Arial, sans-serif;font-style:italic;font-weight:normal;">
-  Flip the whole sheet:
+  Flip the whole sheet:<br>
   <a href="#" id="gflip-today" class="on" style="font-style:normal;font-weight:bold;text-transform:uppercase;text-decoration:none;border-bottom:solid 2px;padding-bottom:1px;color:#DA0303;margin:0 0.4rem;">Today</a>
   /
   <a href="#" id="gflip-2040" style="font-style:normal;font-weight:bold;text-transform:uppercase;text-decoration:none;border-bottom:dotted 2px;padding-bottom:1px;margin:0 0.4rem;">Electro Union →</a>
@@ -490,7 +490,7 @@ details.detail .dl {
     <p id="copyright">
       <span>Norrsken Foundation</span>
       <span>·</span>
-      <span>Bulletin 01 / 2026</span>
+      <span>Electro Union</span>
     </p>
     <p>&#9850; Printed in two colours on one continent</p>
   </div>
@@ -651,7 +651,7 @@ function renderStack() {
     const v = layerView[layer.id];
     return `
       <section class="services section ${v === '2040' ? 'is2040' : ''}" data-layer="${layer.id}">
-        <h3>Layer ${li + 1} &middot; ${layer.name}</h3>
+        <h3>Layer ${li + 1}: ${layer.name}</h3>
         <p class="serviceextras" style="text-align:center;margin-top:-15px;">${layer.tag}</p>
 
         <p class="viewbar">
