@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Square · The Lazard Stack</title>
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  html, body {
+    width: 1080px;
+    height: 1080px;
+    background: white;
+    font-family: "Georgia", "Times New Roman", serif;
+    color: #040FAA;
+    overflow: hidden;
+    -webkit-filter: url("#distort");
+    filter: url("#distort");
+  }
+  .frame {
+    width: 1080px;
+    height: 1080px;
+    padding: 64px;
+    display: grid;
+    grid-template-rows: auto 1fr auto auto;
+    gap: 24px;
+  }
+  .topbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 4px solid #040FAA;
+    padding-bottom: 18px;
+    font-family: "Courier New", monospace;
+    font-size: 18px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    font-weight: bold;
+  }
+  .topbar .kicker { color: #DA0303; }
+  .title-area {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    gap: 32px;
+  }
+  .title {
+    color: #DA0303;
+    font-size: 200px;
+    font-weight: bold;
+    text-transform: uppercase;
+    line-height: 0.86;
+    letter-spacing: -0.02em;
+    position: relative;
+    display: inline-block;
+  }
+  .title::before {
+    content: attr(data-text);
+    position: absolute;
+    top: 5px; left: 6px;
+    color: #040FAA;
+    opacity: 0.22;
+    z-index: -1;
+    pointer-events: none;
+  }
+  .title .bolt {
+    color: #FFB800;
+    font-family: "Courier New", monospace;
+    font-size: 130px;
+    vertical-align: middle;
+    padding: 0 24px;
+    text-shadow: 0 0 14px rgba(255, 184, 0, 0.4);
+  }
+  .subtitle {
+    font-style: italic;
+    font-size: 34px;
+    line-height: 1.25;
+    color: #040FAA;
+    max-width: 880px;
+  }
+  /* Diptych preview */
+  .diptych-preview {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    border: 3px solid #040FAA;
+    font-family: Arial, sans-serif;
+    font-weight: bold;
+    text-transform: uppercase;
+  }
+  .diptych-preview .side {
+    padding: 24px 32px;
+    text-align: center;
+  }
+  .diptych-preview .side.today { color: #040FAA; background: white; }
+  .diptych-preview .side.fut { color: #DA0303; border-left: 3px dotted #040FAA; }
+  .diptych-preview .small {
+    font-size: 14px;
+    letter-spacing: 0.18em;
+    margin-bottom: 6px;
+  }
+  .diptych-preview .big {
+    font-size: 36px;
+    letter-spacing: -0.005em;
+  }
+  .bolt-icon {
+    color: #FFB800;
+    margin-right: 6px;
+  }
+  .bottombar {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+    border-top: 4px solid #040FAA;
+    padding-top: 18px;
+    font-family: "Courier New", monospace;
+    font-size: 18px;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: #040FAA;
+    font-weight: bold;
+  }
+  .bottombar .url { color: #DA0303; }
+</style>
+</head>
+<body>
+<div class="frame">
+
+  <div class="topbar">
+    <div class="kicker">Voltage Test No. 01</div>
+    <div>Bulletin 01</div>
+  </div>
+
+  <div class="title-area">
+    <div class="title" data-text="⚡ The Lazard ⚡">
+      <span class="bolt">⚡</span>The Lazard<span class="bolt">⚡</span>
+      <br>Stack
+    </div>
+    <div class="subtitle">"What it takes to make Europe the Electro Union"</div>
+  </div>
+
+  <div class="diptych-preview">
+    <div class="side today">
+      <div class="small">Today</div>
+      <div class="big">Kill Switch</div>
+    </div>
+    <div class="side fut">
+      <div class="small"><span class="bolt-icon">⚡</span>2040 Electro Union</div>
+      <div class="big">Coalition</div>
+    </div>
+  </div>
+
+  <div class="bottombar">
+    <div>After Olivia Lazard</div>
+    <div class="url">norrsken.org / electro-union</div>
+  </div>
+
+</div>
+
+<svg version="1.1" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" width="0" height="0">
+  <defs>
+    <filter id="distort">
+      <feTurbulence baseFrequency="1 1" numOctaves="1" />
+      <feDisplacementMap in="SourceGraphic" scale="1.4" />
+    </filter>
+  </defs>
+</svg>
+</body>
+</html>

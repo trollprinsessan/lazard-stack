@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>OG · The Lazard Stack</title>
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  html, body {
+    width: 1200px;
+    height: 630px;
+    background: white;
+    font-family: "Georgia", "Times New Roman", serif;
+    color: #040FAA;
+    overflow: hidden;
+    -webkit-filter: url("#distort");
+    filter: url("#distort");
+  }
+  .frame {
+    width: 1200px;
+    height: 630px;
+    padding: 36px 48px;
+    display: grid;
+    grid-template-rows: auto 1fr auto;
+    gap: 12px;
+  }
+  /* Top bar */
+  .topbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 3px solid #040FAA;
+    padding-bottom: 14px;
+    font-family: "Courier New", monospace;
+    font-size: 14px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    font-weight: bold;
+  }
+  .topbar .kicker { color: #DA0303; }
+  .topbar .url { color: #040FAA; }
+  /* Title block */
+  .title-area {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    gap: 22px;
+  }
+  .title {
+    color: #DA0303;
+    font-size: 178px;
+    font-weight: bold;
+    text-transform: uppercase;
+    line-height: 0.86;
+    letter-spacing: -0.02em;
+    position: relative;
+    display: inline-block;
+  }
+  .title::before {
+    content: attr(data-text);
+    position: absolute;
+    top: 4px; left: 5px;
+    color: #040FAA;
+    opacity: 0.22;
+    z-index: -1;
+    pointer-events: none;
+  }
+  .title .bolt {
+    color: #FFB800;
+    font-family: "Courier New", monospace;
+    font-size: 100px;
+    vertical-align: middle;
+    padding: 0 18px;
+    text-shadow: 0 0 12px rgba(255, 184, 0, 0.35);
+  }
+  .subtitle {
+    font-style: italic;
+    font-size: 26px;
+    line-height: 1.2;
+    color: #040FAA;
+    max-width: 820px;
+  }
+  /* Bottom bar */
+  .bottombar {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+    border-top: 3px solid #040FAA;
+    padding-top: 14px;
+    font-family: "Courier New", monospace;
+    font-size: 13px;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: #040FAA;
+    font-weight: bold;
+  }
+  .bottombar .left {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+  }
+  .bottombar .updated { color: #040FAA; font-style: italic; font-size: 11px; text-transform: none; font-family: "Georgia", serif; }
+  .bottombar .right {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    gap: 6px;
+  }
+  .bottombar svg { display: block; }
+  .bcode-text { font-size: 11px; letter-spacing: 0.16em; }
+</style>
+</head>
+<body>
+<div class="frame">
+
+  <div class="topbar">
+    <div class="kicker">Voltage Test No. 01</div>
+    <div class="url">norrsken.org / electro-union</div>
+  </div>
+
+  <div class="title-area">
+    <div class="title" data-text="⚡ The Lazard ⚡">
+      <span class="bolt">⚡</span>The Lazard<span class="bolt">⚡</span>
+      <br>Stack
+    </div>
+    <div class="subtitle">"What it takes to make Europe the Electro Union"<br>
+      <span style="font-style:normal;font-family:'Courier New',monospace;font-size:15px;letter-spacing:0.18em;text-transform:uppercase;font-weight:bold;color:#DA0303;">Twelve moves &middot; Three layers &middot; One continent</span>
+    </div>
+  </div>
+
+  <div class="bottombar">
+    <div class="left">
+      <div>After the open letter by Olivia Lazard</div>
+      <div class="updated">Norrsken Foundation &middot; Electro Union</div>
+    </div>
+    <div class="right">
+      <svg width="220" height="56" viewBox="0 0 175 56" preserveAspectRatio="none" aria-label="ELECTRO-UNION-2040">
+        <g fill="#040FAA">
+          <rect x="0"   y="0" width="1" height="42"/><rect x="2"   y="0" width="3" height="42"/>
+          <rect x="6"   y="0" width="1" height="42"/><rect x="8"   y="0" width="2" height="42"/>
+          <rect x="11"  y="0" width="1" height="42"/><rect x="13"  y="0" width="3" height="42"/>
+          <rect x="17"  y="0" width="2" height="42"/><rect x="20"  y="0" width="1" height="42"/>
+          <rect x="22"  y="0" width="2" height="42"/><rect x="25"  y="0" width="3" height="42"/>
+          <rect x="29"  y="0" width="1" height="42"/><rect x="31"  y="0" width="1" height="42"/>
+          <rect x="33"  y="0" width="2" height="42"/><rect x="36"  y="0" width="3" height="42"/>
+          <rect x="40"  y="0" width="1" height="42"/><rect x="42"  y="0" width="2" height="42"/>
+          <rect x="45"  y="0" width="1" height="42"/><rect x="47"  y="0" width="3" height="42"/>
+          <rect x="51"  y="0" width="2" height="42"/><rect x="54"  y="0" width="1" height="42"/>
+          <rect x="56"  y="0" width="2" height="42"/><rect x="59"  y="0" width="1" height="42"/>
+          <rect x="61"  y="0" width="3" height="42"/><rect x="65"  y="0" width="1" height="42"/>
+          <rect x="67"  y="0" width="2" height="42"/><rect x="70"  y="0" width="3" height="42"/>
+          <rect x="74"  y="0" width="1" height="42"/><rect x="76"  y="0" width="1" height="42"/>
+          <rect x="78"  y="0" width="2" height="42"/><rect x="81"  y="0" width="3" height="42"/>
+          <rect x="85"  y="0" width="2" height="42"/><rect x="88"  y="0" width="1" height="42"/>
+          <rect x="90"  y="0" width="3" height="42"/><rect x="94"  y="0" width="1" height="42"/>
+          <rect x="96"  y="0" width="2" height="42"/><rect x="99"  y="0" width="1" height="42"/>
+          <rect x="101" y="0" width="3" height="42"/><rect x="105" y="0" width="2" height="42"/>
+          <rect x="108" y="0" width="1" height="42"/><rect x="110" y="0" width="3" height="42"/>
+          <rect x="114" y="0" width="1" height="42"/><rect x="116" y="0" width="2" height="42"/>
+          <rect x="119" y="0" width="3" height="42"/><rect x="123" y="0" width="1" height="42"/>
+          <rect x="125" y="0" width="2" height="42"/><rect x="128" y="0" width="1" height="42"/>
+          <rect x="130" y="0" width="3" height="42"/><rect x="134" y="0" width="2" height="42"/>
+          <rect x="137" y="0" width="1" height="42"/><rect x="139" y="0" width="3" height="42"/>
+          <rect x="143" y="0" width="1" height="42"/><rect x="145" y="0" width="2" height="42"/>
+          <rect x="148" y="0" width="3" height="42"/><rect x="152" y="0" width="1" height="42"/>
+          <rect x="154" y="0" width="2" height="42"/><rect x="157" y="0" width="1" height="42"/>
+          <rect x="159" y="0" width="3" height="42"/><rect x="163" y="0" width="2" height="42"/>
+          <rect x="166" y="0" width="1" height="42"/><rect x="168" y="0" width="3" height="42"/>
+          <rect x="172" y="0" width="1" height="42"/><rect x="174" y="0" width="1" height="42"/>
+        </g>
+        <text x="87.5" y="52" text-anchor="middle" font-family="Courier New, monospace" font-size="7" font-weight="bold" fill="#040FAA" letter-spacing="0.3">ELECTRO-UNION-2040</text>
+      </svg>
+    </div>
+  </div>
+
+</div>
+
+<svg version="1.1" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" width="0" height="0">
+  <defs>
+    <filter id="distort">
+      <feTurbulence baseFrequency="1 1" numOctaves="1" />
+      <feDisplacementMap in="SourceGraphic" scale="1.4" />
+    </filter>
+  </defs>
+</svg>
+</body>
+</html>
